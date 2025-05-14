@@ -36,12 +36,11 @@ func SingleHash(in, out chan interface{}) {
 		wg.Add(1)
 		go func(data interface{}) {
 			defer wg.Done()
-			
 			dataStr := strconv.Itoa(data.(int))
 			
 			crc32Chan := make(chan string)
 			md5Crc32Chan := make(chan string)
-			
+
 			go func() {
 				crc32Chan <- DataSignerCrc32(dataStr)
 			}()
@@ -59,13 +58,11 @@ func SingleHash(in, out chan interface{}) {
 			out <- result
 		}(data)
 	}
-	
 	wg.Wait()
 }
 
 func MultiHash(in, out chan interface{}) {
 	wg := &sync.WaitGroup{}
-	
 	for data := range in {
 		wg.Add(1)
 		go func(data interface{}) {
@@ -101,7 +98,6 @@ func CombineResults(in, out chan interface{}) {
 	}
 
 	sort.Strings(results)
-	
 	result := strings.Join(results, "_")
 	out <- result
 }
